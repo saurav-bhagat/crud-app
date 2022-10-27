@@ -13,6 +13,7 @@ const AddEdit = () => {
     const [state, setState] = useState(initialState);
     const navigate = useNavigate();
     const { id } = useParams();
+    console.log(id);
 
     const {name, email, contact} = state;
 
@@ -33,7 +34,9 @@ const AddEdit = () => {
             console.log(response.data);
         }
         setState({
-            ...response.data[0], 
+            name: response.data.name, 
+            email: response.data.email,
+            contact: response.data.contact,
         })
 
     };
@@ -60,6 +63,7 @@ const AddEdit = () => {
         e.preventDefault();
         const response = await axios.put(`http://localhost:3200/user/${id}`, state);
         console.log("Inside handleUpdate", state);
+        console.log(response);
         if(response.status === 200){
             console.log(response.data);
             setState({

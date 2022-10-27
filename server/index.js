@@ -1,6 +1,7 @@
-const express = require("express");
+const express    = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const cors       = require("cors");
+const mongoose   = require('mongoose');
 const userRouter = require("./routes/users.js");
 
 const app = express();
@@ -19,6 +20,17 @@ app.get("/", (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running at port ${PORT}`);
-});
+const startServer = async () => {
+
+    try {
+        await mongoose.connect(``);
+
+        app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));
+
+    } catch (err) {
+        console.log("Error in starting server: ", err);
+    }
+
+};
+
+startServer();

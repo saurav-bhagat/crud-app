@@ -1,41 +1,44 @@
-const { v4: uuidv4 } = require('uuid');
+const { User } = require("../models/User");
 
-let USERS = [];
 
-const getUsers = (req, res) => {
-    res.send(USERS);
+const getUsers = async (req, res) => {
+    const users = await User.find();
+    res.send(users);
 };
 
-const createUser = (req, res) => {
-    const user = req.body;
-
-    USERS.push({ ...user, id: uuidv4() });
+const createUser = async (req, res) => {
+    const user = new User({ ...req.body });
+    await user.save();
     res.send("User added");
 };
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
     
-    const singleUser = USERS.filter((user) => user.id === req.params.id);
-    if(singleUser.length > 0){
-        res.send(singleUser);
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if(user){
+        res.send(user);
     } else {
         res.send("User Not Present");
     }
 };
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
 
-    USERS = USERS.filter((user) => user.id !== req.params.id);
-    res.send("User deleted Successfully");
+    const userId = req.params.id;
+    const deletedUser = await User.findByIdAndDelete(userId);
+    res.send(deletedUser);
 };
 
-const updateUser = (req, res) => {
-    const user = USERS.find((user) => user.id === req.params.id);
+const updateUser = async (req, res) => {
 
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.contact = req.body.contact;
+    const userId = req.params.id;
 
+    await User.updateOne({ userId }, 
+        {   name: req.body.name, 
+            email : req.body.email,
+            contact: req.body.contact
+       });
     res.send("User updated successfully");
 };
 

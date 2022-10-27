@@ -18,12 +18,15 @@ const Home = () => {
     }, []);
 
     const deleteUser = async (id) => {
+        console.log("inside delete user: id is", id);
         const response = await axios.delete(`http://localhost:3200/user/${id}`);
         if(response.status === 200) {
             alert(`user deleted successfully`);
         }
         getUsers();
     };
+
+    console.log(data);
 
     return (
         <div style={{ marginTop: "100px" }}>
@@ -47,11 +50,11 @@ const Home = () => {
                                     <td>{item.email}</td>
                                     <td>{item.contact}</td>
                                     <td>
-                                        <Link to={`/update/${item.id}`}>
+                                        <Link to={`/update/${item._id}`}>
                                             <button>Edit</button>
                                         </Link>
-                                        <button onClick={() => deleteUser(item.id)}>Delete</button>
-                                        <Link to={`/view/${item.id}`}>
+                                        <button onClick={() => deleteUser(item._id)}>Delete</button>
+                                        <Link to={`/view/${item._id}`}>
                                             <button>View</button>
                                         </Link>
                                     </td>
